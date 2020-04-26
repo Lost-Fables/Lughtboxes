@@ -74,8 +74,11 @@ public class Vote implements CommandExecutor {
             @Override
             public ItemStack getItemStack(MenuAgent menuAgent) {
 
-                ItemStack coinsItem = new ItemStack(Material.PLAYER_HEAD);
+                ItemStack coinsItem = ItemUtil.getSkullFromTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMzk2Y2UxM2ZmNjE1NWZkZjMyMzVkOGQyMjE3NGM1ZGU0YmY1NTEyZjFhZGVkYTFhZmEzZmMyODE4MGYzZjcifX19");
+                ItemMeta coinsItemMeta = coinsItem.getItemMeta();
+                coinsItemMeta.setDisplayName(ChatColor.RESET + "" + ChatColor.GOLD + "Coins");
 
+                coinsItem.setItemMeta(coinsItemMeta);
                 return coinsItem;
             }
 
@@ -89,8 +92,11 @@ public class Vote implements CommandExecutor {
             @Override
             public ItemStack getItemStack(MenuAgent menuAgent) {
 
-                ItemStack premCoinsItem = new ItemStack(Material.PLAYER_HEAD);
+                ItemStack premCoinsItem = ItemUtil.getSkullFromTexture("eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMjZhNjg4NmU4NGVhZTViYTJiMmI2MDI0MzI0MjljNmZiMjg2OTFmYzAyZTlmOWNjYjVjNTdmMmNkZDBmMWQ4In19fQ==");
+                ItemMeta premCoinsItemMeta = premCoinsItem.getItemMeta();
+                premCoinsItemMeta.setDisplayName(ChatColor.RESET + "" + ChatColor.GOLD + "Premium Coins");
 
+                premCoinsItem.setItemMeta(premCoinsItemMeta);
                 return premCoinsItem;
             }
 
