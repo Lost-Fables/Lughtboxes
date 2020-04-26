@@ -10,4 +10,4 @@ commands:
   vote:
     description: Brings up the voting menu
     usage: |
-      /&lt;command&gt; [player]
+      /<command> [set|add|remove] [coins|premcoins] [player] [value]
