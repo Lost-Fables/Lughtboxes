@@ -21,45 +21,8 @@ public class MySQLController implements Listener  {
 
     }
 
-    @EventHandler
-    public void onJoin(PlayerJoinEvent event) throws SQLException {
-        Player player = event.getPlayer();
-        createPlayer(player.getUniqueId(), player);
-    }
-    public boolean playerExists(UUID uuid) throws SQLException {
 
-            PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable() + " WHERE UUID=?");
-            statement.setString(1, uuid.toString());
 
-            ResultSet results = statement.executeQuery();
-            if (results.next()) {
-                //If player is found
-                return true;
-            }
-
-        //If player is not found
-        return false;
-    }
-
-    public void createPlayer(final UUID uuid, Player player) throws SQLException {
-
-            PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable() + " WHERE UUID=?");
-            statement.setString(1, uuid.toString());
-
-            ResultSet results = statement.executeQuery();
-            results.next();
-            if (!(playerExists(uuid))) {
-                PreparedStatement insert = plugin.getConnection().prepareStatement("INSERT INTO " + plugin.getTable() + " (UUID,COINS,PREMCOINS,TOTALVOTES,RECCURENTVOTES) VALUES (?,?,?,?,?)");
-                insert.setString(1, uuid.toString());
-                insert.setInt(2, 0);
-                insert.setInt(3, 0);
-                insert.setInt(4, 0);
-                insert.setInt(5,0);
-                insert.executeUpdate();
-
-                plugin.getLogger().info(ChatColor.GREEN + "New player has been inserted into Lughtbox table.");
-            }
-    }
 
     public void mysqlSetup() {
         try {
