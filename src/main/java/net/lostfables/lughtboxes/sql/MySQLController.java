@@ -1,4 +1,4 @@
-package net.lostfables.lughtboxes.util;
+package net.lostfables.lughtboxes.sql;
 
 import net.lostfables.lughtboxes.Lughtbox;
 import net.md_5.bungee.api.ChatColor;
@@ -37,7 +37,6 @@ public class MySQLController implements Listener  {
             if(openConnection()) {
                 PreparedStatement create = plugin.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS " + plugin.getTable() + "(UUID varchar(36), COINS INT, PREMCOINS INT, TOTALVOTES INT, RECCURENTVOTES INT, PRIMARY KEY(UUID))");
                 create.executeUpdate();
-                plugin.getLogger().info("Table Implemented");
             }
 
 

@@ -6,20 +6,20 @@ import co.lotc.core.bukkit.menu.MenuAgent;
 import co.lotc.core.bukkit.menu.icon.Button;
 import co.lotc.core.bukkit.menu.icon.Icon;
 import co.lotc.core.bukkit.util.ItemUtil;
-import co.lotc.core.util.TimeUtil;
+import co.lotc.core.bukkit.util.PlayerUtil;
 import net.lostfables.lughtboxes.Lughtbox;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class Vote implements CommandExecutor {
 
@@ -32,42 +32,113 @@ public class Vote implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-        if(sender instanceof Player && args.length == 0) {
+        if(sender instanceof Player) {
+            Player player = (Player) sender;
+            Menu voteMenu = null;
 
 
-
-
-        } else if(args[1].equalsIgnoreCase("set") || args[1].equalsIgnoreCase("remove") || args[1].equalsIgnoreCase("add")) {
-
-            try {
-                if(plugin.getConnection().isClosed() || plugin.getConnection().equals(null)) {
-                    if(!plugin.getSQLControl().openConnection()) {
-                        sender.sendMessage(ChatColor.DARK_RED + "An Internal Error has occurred.");
-                        return false;
-                    }
-
-                }
-
-
-
-                if(args[1].equalsIgnoreCase("set")) {
-                    PreparedStatement setStatement = plugin.getConnection().prepareStatement("INSERT INTO " + plugin.getTable() + "");
-                    sender.sendMessage("Suck cock.");
-                    setStatement.executeUpdate();
-
-                } else if(args[1].equalsIgnoreCase("remove")) {
-
-                } else if(args[1].equalsIgnoreCase("add")) {
-
-                }
-            } catch(SQLException e) {
-
+            if(args.length == 0) {
+                voteMenu = voteMenuBuilder(player, voteMenu);
+                voteMenu.openSession(player);
             }
 
-        } else {
-            plugin.getLogger().info(ChatColor.DARK_RED + "You need to be a player to execute this command.");
         }
+
         return false;
+    }
+
+    private Menu voteMenuBuilder(Player player, Menu voteMenuBase) {
+
+        ArrayList<Icon> icons = new ArrayList<>();
+
+        Icon playerIcon = new Button() {
+            @Override
+            public ItemStack getItemStack(MenuAgent menuAgent) {
+
+                ItemStack playerItem = ItemUtil.getSkullFromTexture(PlayerUtil.getPlayerTexture(player.getUniqueId()));
+                ItemMeta playerItemMeta = playerItem.getItemMeta();
+                playerItemMeta.setDisplayName(ChatColor.RESET + "" + ChatColor.BOLD + player.getDisplayName());
+
+
+                playerItem.setItemMeta(playerItemMeta);
+                return playerItem;
+            }
+
+            @Override
+            public void click(MenuAction menuAction) {
+
+            }
+        };
+
+        Icon coinsIcon = new Button() {
+            @Override
+            public ItemStack getItemStack(MenuAgent menuAgent) {
+
+                ItemStack coinsItem = new ItemStack(Material.PLAYER_HEAD);
+
+                return coinsItem;
+            }
+
+            @Override
+            public void click(MenuAction menuAction) {
+
+            }
+        };
+
+        Icon premCoinsIcon = new Button() {
+            @Override
+            public ItemStack getItemStack(MenuAgent menuAgent) {
+
+                ItemStack premCoinsItem = new ItemStack(Material.PLAYER_HEAD);
+
+                return premCoinsItem;
+            }
+
+            @Override
+            public void click(MenuAction menuAction) {
+
+            }
+        };
+
+        Icon totalVotesIcon = new Button() {
+            @Override
+            public ItemStack getItemStack(MenuAgent menuAgent) {
+
+                ItemStack totalVotesItem = new ItemStack(Material.PLAYER_HEAD);
+
+                return totalVotesItem;
+            }
+
+            @Override
+            public void click(MenuAction menuAction) {
+
+            }
+        };
+
+        Icon recurrentVotesIcon = new Button() {
+            @Override
+            public ItemStack getItemStack(MenuAgent menuAgent) {
+
+                ItemStack recurrentVotesItem = new ItemStack(Material.PLAYER_HEAD);
+
+                return recurrentVotesItem;
+            }
+
+            @Override
+            public void click(MenuAction menuAction) {
+
+            }
+        };
+
+        icons.add(playerIcon);
+        icons.add(coinsIcon);
+        icons.add(premCoinsIcon);
+        icons.add(totalVotesIcon);
+        icons.add(recurrentVotesIcon);
+
+        voteMenuBase = voteMenuBase.fromIcons(ChatColor.BOLD + "" + ChatColor.DARK_GREEN + "Vote Menu",icons);
+
+        return voteMenuBase;
     }
 
 

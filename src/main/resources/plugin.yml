@@ -11,5 +11,3 @@ commands:
     description: Brings up the voting menu
     usage: |
       /&lt;command&gt; [player]
-  newMenu:
-    description: A test
