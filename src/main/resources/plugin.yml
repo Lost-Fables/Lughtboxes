@@ -11,3 +11,12 @@ commands:
     description: Brings up the voting menu
     usage: |
       /<command> [set|add|remove] [coins|premcoins] [player] [value]
+    permission: lughtboxes.vote
+    permission-message: You do not have permission to access this.
+permissions:
+  lughtboxes.vote:
+    description: Allows the use of the Vote command to access the menu
+    default: not op
+  lughtboxes.staff:
+    description: Allows lughtbox staff commands
+    default: op

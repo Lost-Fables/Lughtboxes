@@ -49,6 +49,11 @@ public class Vote implements CommandExecutor {
                 return false;
             }
 
+            if(!player.hasPermission("lughtboxes.staff")) {
+                player.sendMessage(ChatColor.DARK_RED + "[Lughtbox] You do not have the permissions to access this command.");
+                return false;
+            }
+
             if(args.length == 4)   {
 
                 UUID uuid = PlayerUtil.getPlayerUUID(args[2]);
@@ -71,52 +76,38 @@ public class Vote implements CommandExecutor {
                     return false;
                 }
 
-                if(args[1].equalsIgnoreCase("coins")) {
+                try {
+                    plugin.getSQLControl().openConnection();
+                    PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable() + " WHERE UUID=?");
+                    statement.setString(1, String.valueOf(player.getUniqueId()));
+                    ResultSet s = statement.executeQuery();
+                    s.next();
 
-                    if(args[0].equalsIgnoreCase("set")) {
+                    if (args[1].equalsIgnoreCase("coins")) {
 
-                        try {
-                            plugin.getSQLControl().openConnection();
-
-                            PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable() + " WHERE UUID=?");
-                            statement.setString(1, String.valueOf(player.getUniqueId()));
-                            ResultSet s = statement.executeQuery();
-                            s.next();
+                        if (args[0].equalsIgnoreCase("set")) {
 
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET COINS=? WHERE UUID=?");
                             statement.setInt(1, Integer.parseInt(args[3]));
                             statement.setString(2, uuid.toString());
-                            statement.executeUpdate();
 
-                            plugin.getConnection().close();
-
-                        } catch (SQLException e) {
-                            e.printStackTrace();
                         }
-                    }
-                } else if(args[1].equalsIgnoreCase("premcoins")) {
+                    } else if (args[1].equalsIgnoreCase("premcoins")) {
 
-                    if(args[0].equalsIgnoreCase("set")) {
-
-                        try {
-                            plugin.getSQLControl().openConnection();
-
-                            PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable() + " WHERE UUID=?");
-                            statement.setString(1, String.valueOf(player.getUniqueId()));
-                            ResultSet s = statement.executeQuery();
-                            s.next();
+                        if (args[0].equalsIgnoreCase("set")) {
 
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET PREMCOINS=? WHERE UUID=?");
                             statement.setInt(1, Integer.parseInt(args[3]));
                             statement.setString(2, uuid.toString());
-                            statement.executeUpdate();
 
-                            plugin.getConnection().close();
-
-                        } catch (SQLException e) {
-                            e.printStackTrace();
                         }
                     }
+
+                    statement.executeUpdate();
+                    plugin.getConnection().close();
+
+                } catch(SQLException e) {
+                    e.printStackTrace();
                 }
             }
 
