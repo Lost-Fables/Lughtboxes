@@ -1,0 +1,6 @@
+host: 'localhost'
+port: 3306
+database: 'lughtboxes'
+username: 'root'
+password:
+table: 'player_data'

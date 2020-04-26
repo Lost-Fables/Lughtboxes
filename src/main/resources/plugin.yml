@@ -1,0 +1,14 @@
+name: Lughtboxes
+version: ${project.version}
+main: net.lostfables.lughtboxes.Lughtbox
+api-version: 1.13
+authors: [LughGK]
+description: A Configurable Set of Rewards
+website: lostfables.net
+commands:
+  vote:
+    description: Brings up the voting menu
+    usage: |
+      /&lt;command&gt; [player]
+  newMenu:
+    description: A test
