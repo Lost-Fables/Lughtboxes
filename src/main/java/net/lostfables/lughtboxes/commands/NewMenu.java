@@ -5,6 +5,7 @@ import co.lotc.core.bukkit.menu.MenuAction;
 import co.lotc.core.bukkit.menu.MenuAgent;
 import co.lotc.core.bukkit.menu.icon.Button;
 import co.lotc.core.bukkit.menu.icon.Icon;
+import net.lostfables.lughtboxes.Lughtbox;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 public class NewMenu implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        Lughtbox.get().getLogger().info("Command Entered.");
 
         Player p = (Player)sender;
         Menu homeMenu = null;
@@ -34,11 +36,12 @@ public class NewMenu implements CommandExecutor {
         };
 
         icons.add(icon);
-        sender.sendMessage(String.valueOf(icons.size()));
+        Lughtbox.get().getLogger().info("Icons Array Size: " + icons.size());
 
-        homeMenu = homeMenu.fromIcons("I hate black people", icons);
-
+        homeMenu = Menu.fromIcons("Lugh is Dumb", icons);
         homeMenu.openSession(p);
+
+        Lughtbox.get().getLogger().info("Menu should be open.");
 
         return false;
     }

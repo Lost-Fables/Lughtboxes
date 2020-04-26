@@ -11,12 +11,16 @@ import java.sql.Connection;
 
 public final class Lughtbox extends JavaPlugin {
 
+    private static Lughtbox instance;
     private MySQLController SQLControl;
     private Vote vote;
     private Connection connection;
     private String host,database,username,password,table;
     private int port;
 
+    public static Lughtbox get() {
+        return instance;
+    }
 
     @Override
     public void onEnable() {
@@ -32,8 +36,7 @@ public final class Lughtbox extends JavaPlugin {
             e.printStackTrace();
         }
 
-
-
+        instance = this;
     }
 
     @Override
