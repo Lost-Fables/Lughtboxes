@@ -20,7 +20,6 @@ public class NewMenu implements CommandExecutor {
         Lughtbox.get().getLogger().info("Command Entered.");
 
         Player p = (Player)sender;
-        Menu homeMenu = null;
         ArrayList<Icon> icons = new ArrayList<>();
 
         Button icon = new Button() {
@@ -38,7 +37,7 @@ public class NewMenu implements CommandExecutor {
         icons.add(icon);
         Lughtbox.get().getLogger().info("Icons Array Size: " + icons.size());
 
-        homeMenu = Menu.fromIcons("Lugh is Dumb", icons);
+        Menu homeMenu = Menu.fromIcons("Lugh is Dumb", icons);
         homeMenu.openSession(p);
 
         Lughtbox.get().getLogger().info("Menu should be open.");

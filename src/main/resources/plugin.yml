@@ -5,6 +5,7 @@ api-version: 1.13
 authors: [LughGK]
 description: A Configurable Set of Rewards
 website: lostfables.net
+depend: [Tythan]
 commands:
   vote:
     description: Brings up the voting menu
