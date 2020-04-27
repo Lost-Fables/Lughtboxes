@@ -57,8 +57,8 @@ public class Vote implements CommandExecutor {
             if(args.length == 4)   {
 
                 UUID uuid = PlayerUtil.getPlayerUUID(args[2]);
-
                 int value;
+                String targetName;
 
                 try {
                     value = Integer.parseInt(args[3]);
@@ -69,6 +69,8 @@ public class Vote implements CommandExecutor {
                 if(uuid == null) {
                     player.sendMessage(ChatColor.DARK_RED + "[Lughtbox] You must choose a valid player.");
                     return false;
+                } else {
+                    targetName = args[2];
                 }
 
                 if(args[3].isEmpty() || value <= 0) {
@@ -77,10 +79,13 @@ public class Vote implements CommandExecutor {
                 }
 
                 try {
+
                     plugin.getSQLControl().openConnection();
                     PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable() + " WHERE UUID=?");
-                    statement.setString(1, String.valueOf(player.getUniqueId()));
+                    int currentAmount;
+                    statement.setString(1, uuid.toString());
                     ResultSet s = statement.executeQuery();
+                    ResultSet adder;
                     s.next();
 
                     if (args[1].equalsIgnoreCase("coins")) {
@@ -88,7 +93,33 @@ public class Vote implements CommandExecutor {
                         if (args[0].equalsIgnoreCase("set")) {
 
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET COINS=? WHERE UUID=?");
-                            statement.setInt(1, Integer.parseInt(args[3]));
+                            statement.setInt(1, value);
+                            statement.setString(2, uuid.toString());
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + targetName + " has their voting coins set to " + value);
+
+                        } else if (args[0].equalsIgnoreCase("add")) {
+
+                            statement = plugin.getConnection().prepareStatement("SELECT COINS FROM " + plugin.getTable() + " WHERE UUID=?");
+                            statement.setString(1, uuid.toString());
+                            adder = statement.executeQuery();
+                            adder.next();
+                            currentAmount = adder.getInt(1);
+
+                            statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET COINS=? WHERE UUID=?");
+                            statement.setInt(1, value + currentAmount);
+                            statement.setString(2, uuid.toString());
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + "");
+
+                        } else if (args[0].equalsIgnoreCase("remove")) {
+
+                            statement = plugin.getConnection().prepareStatement("SELECT COINS FROM " + plugin.getTable() + " WHERE UUID=?");
+                            statement.setString(1, uuid.toString());
+                            adder = statement.executeQuery();
+                            adder.next();
+                            currentAmount = adder.getInt(1);
+
+                            statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET COINS=? WHERE UUID=?");
+                            statement.setInt(1, currentAmount - value);
                             statement.setString(2, uuid.toString());
 
                         }
@@ -97,7 +128,32 @@ public class Vote implements CommandExecutor {
                         if (args[0].equalsIgnoreCase("set")) {
 
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET PREMCOINS=? WHERE UUID=?");
-                            statement.setInt(1, Integer.parseInt(args[3]));
+                            statement.setInt(1, value);
+                            statement.setString(2, uuid.toString());
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + targetName + " has their premium coins set to " + value);
+
+                        } else if (args[0].equalsIgnoreCase("add")) {
+
+                            statement = plugin.getConnection().prepareStatement("SELECT PREMCOINS FROM " + plugin.getTable() + " WHERE UUID=?");
+                            statement.setString(1, uuid.toString());
+                            adder = statement.executeQuery();
+                            adder.next();
+                            currentAmount = adder.getInt(1);
+
+                            statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET PREMCOINS=? WHERE UUID=?");
+                            statement.setInt(1, value + currentAmount);
+                            statement.setString(2, uuid.toString());
+
+                        } else if (args[0].equalsIgnoreCase("remove")) {
+
+                            statement = plugin.getConnection().prepareStatement("SELECT PREMCOINS FROM " + plugin.getTable() + " WHERE UUID=?");
+                            statement.setString(1, uuid.toString());
+                            adder = statement.executeQuery();
+                            adder.next();
+                            currentAmount = adder.getInt(1);
+
+                            statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable() + " SET PREMCOINS=? WHERE UUID=?");
+                            statement.setInt(1, currentAmount - value);
                             statement.setString(2, uuid.toString());
 
                         }
