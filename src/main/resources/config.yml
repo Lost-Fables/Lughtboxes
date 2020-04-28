@@ -3,4 +3,6 @@ port: 3306
 database: 'lughtboxes'
 username: 'root'
 password:
-table: 'player_data'
+table:
+  - 'player_data'
+  - 'lughtboxes'

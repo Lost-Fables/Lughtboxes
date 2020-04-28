@@ -3,10 +3,11 @@ package net.lostfables.lughtboxes;
 import net.lostfables.lughtboxes.commands.Vote;
 import net.lostfables.lughtboxes.sql.AddingNewPlayerToSQLDatabase;
 import net.lostfables.lughtboxes.sql.MySQLController;
-import net.lostfables.lughtboxes.util.Utils;
+import net.lostfables.lughtboxes.util.LughUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
+import java.util.List;
 
 
 public final class Lughtbox extends JavaPlugin {
@@ -14,7 +15,8 @@ public final class Lughtbox extends JavaPlugin {
     private static Lughtbox instance;
     private MySQLController SQLControl;
     private Connection connection;
-    private String host,database,username,password,table;
+    private String host,database,username,password;
+    private List<String> table;
     private int port;
 
     public static Lughtbox get() {
@@ -24,7 +26,7 @@ public final class Lughtbox extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        getLogger().info(Utils.chat("&2The Artificer begins his work. . ."));
+        getLogger().info(LughUtil.chat("&2The Artificer begins his work. . ."));
         try {
             saveDefaultConfig();
             SQLControl = new MySQLController();
@@ -37,6 +39,8 @@ public final class Lughtbox extends JavaPlugin {
             e.printStackTrace();
         }
 
+        System.out.println(getTable());
+
         instance = this;
     }
 
@@ -45,9 +49,9 @@ public final class Lughtbox extends JavaPlugin {
         // Plugin shutdown logic
         try {
             connection.close();
-            getLogger().info(Utils.chat("&2The Artificer closes shop for the day."));
+            getLogger().info(LughUtil.chat("&2The Artificer closes shop for the day."));
         } catch(Exception e) {
-            getLogger().info(Utils.chat("&4Error closing down shop!"));
+            getLogger().info(LughUtil.chat("&4Error closing down shop!"));
             e.printStackTrace();
         }
     }
@@ -92,11 +96,11 @@ public final class Lughtbox extends JavaPlugin {
         this.password = password;
     }
 
-    public String getTable() {
+    public List<String> getTable() {
         return table;
     }
 
-    public void setTable(String table) {
+    public void setTable(List<String> table) {
         this.table = table;
     }
 
