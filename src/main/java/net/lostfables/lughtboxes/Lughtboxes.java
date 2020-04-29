@@ -1,8 +1,9 @@
 package net.lostfables.lughtboxes;
 
+import net.lostfables.lughtboxes.commands.Lughtbox;
 import net.lostfables.lughtboxes.commands.Vote;
-import net.lostfables.lughtboxes.sql.AddingNewPlayerToSQLDatabase;
-import net.lostfables.lughtboxes.sql.MySQLController;
+import net.lostfables.lughtboxes.events.AddingNewPlayerToSQLDatabase;
+import net.lostfables.lughtboxes.util.MySQLController;
 import net.lostfables.lughtboxes.util.LughUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -10,16 +11,16 @@ import java.sql.Connection;
 import java.util.List;
 
 
-public final class Lughtbox extends JavaPlugin {
+public final class Lughtboxes extends JavaPlugin {
 
-    private static Lughtbox instance;
+    private static Lughtboxes instance;
     private MySQLController SQLControl;
     private Connection connection;
     private String host,database,username,password;
     private List<String> table;
     private int port;
 
-    public static Lughtbox get() {
+    public static Lughtboxes get() {
         return instance;
     }
 
@@ -32,6 +33,7 @@ public final class Lughtbox extends JavaPlugin {
             SQLControl = new MySQLController();
             SQLControl.mysqlSetup();
             new Vote();
+            new Lughtbox();
             new AddingNewPlayerToSQLDatabase();
             getConnection().close();
 

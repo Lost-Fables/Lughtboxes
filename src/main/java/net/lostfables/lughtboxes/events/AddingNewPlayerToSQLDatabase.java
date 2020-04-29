@@ -1,9 +1,8 @@
-package net.lostfables.lughtboxes.sql;
+package net.lostfables.lughtboxes.events;
 
-import net.lostfables.lughtboxes.Lughtbox;
+import net.lostfables.lughtboxes.Lughtboxes;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -15,10 +14,9 @@ import java.util.UUID;
 
 public class AddingNewPlayerToSQLDatabase implements Listener {
 
-    Lughtbox plugin = Lughtbox.getPlugin(Lughtbox.class);
+    Lughtboxes plugin = Lughtboxes.getPlugin(Lughtboxes.class);
 
     public AddingNewPlayerToSQLDatabase() {
-        plugin.getLogger().info("Works.");
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
 
@@ -51,7 +49,9 @@ public class AddingNewPlayerToSQLDatabase implements Listener {
     }
 
     public void createPlayer(final UUID uuid) throws SQLException {
-        plugin.getSQLControl().openConnection();
+        if(!plugin.getSQLControl().openConnection()) {
+            return;
+        }
         PreparedStatement statement = plugin.getConnection().prepareStatement("SELECT * FROM " + plugin.getTable().get(0) + " WHERE UUID=?");
         statement.setString(1, uuid.toString());
 

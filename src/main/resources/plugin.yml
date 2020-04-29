@@ -1,6 +1,6 @@
 name: Lughtboxes
 version: ${project.version}
-main: net.lostfables.lughtboxes.Lughtbox
+main: net.lostfables.lughtboxes.Lughtboxes
 api-version: 1.13
 authors: [LughGK]
 description: A Configurable Set of Rewards
@@ -13,9 +13,11 @@ commands:
       /<command> [set|add|remove] [coins|premcoins] [player] [value]
     permission: lughtboxes.vote
     permission-message: You do not have permission to access this.
+  lughtbox:
+    description: Manage lughtboxes
 permissions:
   lughtboxes.staff:
-    description: Allows lughtbox staff commands
+    description: Allows Lughtboxes staff commands
     default: op
   lughtboxes.vote:
-    description: Allows use of lughtbox vote command
+    description: Allows use of Lughtboxes vote command

@@ -7,15 +7,12 @@ import co.lotc.core.bukkit.menu.icon.Button;
 import co.lotc.core.bukkit.menu.icon.Icon;
 import co.lotc.core.bukkit.util.ItemUtil;
 import co.lotc.core.bukkit.util.PlayerUtil;
-import com.google.gson.Gson;
-import net.lostfables.lughtboxes.Lughtbox;
-import net.lostfables.lughtboxes.util.LughUtil;
+import net.lostfables.lughtboxes.Lughtboxes;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,14 +21,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 
 public class Vote implements CommandExecutor {
 
-    private Lughtbox plugin = Lughtbox.getPlugin(Lughtbox.class);
+    private Lughtboxes plugin = Lughtboxes.getPlugin(Lughtboxes.class);
 
     public Vote() {
         plugin.getCommand("vote").setExecutor(this);
@@ -45,24 +41,6 @@ public class Vote implements CommandExecutor {
             Player player = (Player) sender;
             Menu voteMenu = null;
 
-            ItemStack item = player.getInventory().getItem(0);
-            List<ItemStack> items = Arrays.asList(player.getInventory().getContents());
-
-            String itemStr = LughUtil.itemStackListToString(items);
-            //plugin.getLogger().info(itemStr);
-
-            List<ItemStack> items2 = LughUtil.stringToItemStackList(itemStr);
-            player.getInventory().clear();
-            //plugin.getLogger().info(items2.toString());
-
-            ItemStack[] itemStacks = new ItemStack[items2.size()];
-            for(int x = 0; x < items2.size(); x++) {
-                    itemStacks[x] = items2.get(x);
-
-            }
-            System.out.println(itemStacks.length);
-            player.getInventory().setContents(itemStacks);
-
 
             //Opens the vote menu
             if(args.length == 0) {
@@ -71,8 +49,9 @@ public class Vote implements CommandExecutor {
                 return false;
             }
 
+
             if(!player.hasPermission("lughtboxes.staff")) {
-                player.sendMessage(ChatColor.DARK_RED + "[Lughtbox] You do not have the permissions to access this command.");
+                player.sendMessage(ChatColor.DARK_RED + "[Lughtboxes] You do not have the permissions to access this command.");
                 return false;
             }
 
@@ -85,11 +64,11 @@ public class Vote implements CommandExecutor {
                 int value;
                 try { value = Integer.parseInt(args[3]); } catch(Exception e) { value = 0; }
 
-                if(uuid == null) { player.sendMessage(ChatColor.DARK_RED + "[Lughtbox] You must choose a valid player.");
+                if(uuid == null) { player.sendMessage(ChatColor.DARK_RED + "[Lughtboxes] You must choose a valid player.");
                 return false; }
                 else { targetName = args[2]; }
 
-                if(args[3].isEmpty() || value <= 0) { player.sendMessage(ChatColor.DARK_RED + "[Lughtbox] You must insert a valid value.");
+                if(args[3].isEmpty() || value <= 0) { player.sendMessage(ChatColor.DARK_RED + "[Lughtboxes] You must insert a valid value.");
                     return false; }
 
                 try {
@@ -109,7 +88,7 @@ public class Vote implements CommandExecutor {
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable().get(0) + " SET COINS=? WHERE UUID=?");
                             statement.setInt(1, value);
                             statement.setString(2, uuid.toString());
-                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + targetName + "'s voting coins has been set to " + value);
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtboxes] " + targetName + "'s voting coins has been set to " + value);
 
                         } else if (args[0].equalsIgnoreCase("add")) {
 
@@ -122,7 +101,7 @@ public class Vote implements CommandExecutor {
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable().get(0) + " SET COINS=? WHERE UUID=?");
                             statement.setInt(1, value + currentAmount);
                             statement.setString(2, uuid.toString());
-                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + value + " has been added to " + targetName + "'s voting coins.");
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtboxes] " + value + " has been added to " + targetName + "'s voting coins.");
 
                         } else if (args[0].equalsIgnoreCase("remove")) {
 
@@ -135,7 +114,7 @@ public class Vote implements CommandExecutor {
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable().get(0) + " SET COINS=? WHERE UUID=?");
                             statement.setInt(1, currentAmount - value);
                             statement.setString(2, uuid.toString());
-                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + value + " has been removed to " + targetName + "'s voting coins.");
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtboxes] " + value + " has been removed to " + targetName + "'s voting coins.");
 
                         }
                     } else if (args[1].equalsIgnoreCase("premcoins")) {
@@ -145,7 +124,7 @@ public class Vote implements CommandExecutor {
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable().get(0) + " SET PREMCOINS=? WHERE UUID=?");
                             statement.setInt(1, value);
                             statement.setString(2, uuid.toString());
-                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + targetName + "'s voting coins has been set to " + value);
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtboxes] " + targetName + "'s voting coins has been set to " + value);
 
                         } else if (args[0].equalsIgnoreCase("add")) {
 
@@ -158,7 +137,7 @@ public class Vote implements CommandExecutor {
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable().get(0) + " SET PREMCOINS=? WHERE UUID=?");
                             statement.setInt(1, value + currentAmount);
                             statement.setString(2, uuid.toString());
-                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + value + " has been added to " + targetName + "'s premium coins.");
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtboxes] " + value + " has been added to " + targetName + "'s premium coins.");
 
                         } else if (args[0].equalsIgnoreCase("remove")) {
 
@@ -171,7 +150,7 @@ public class Vote implements CommandExecutor {
                             statement = plugin.getConnection().prepareStatement("UPDATE " + plugin.getTable().get(0) + " SET PREMCOINS=? WHERE UUID=?");
                             statement.setInt(1, currentAmount - value);
                             statement.setString(2, uuid.toString());
-                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtbox] " + value + " has been removed from " + targetName + "'s premium coins.");
+                            player.sendMessage(ChatColor.DARK_GREEN + "[Lughtboxes] " + value + " has been removed from " + targetName + "'s premium coins.");
 
                         }
                     }
